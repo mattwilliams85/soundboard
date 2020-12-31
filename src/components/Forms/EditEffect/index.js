@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { SketchPicker } from 'react-color';
+import { Howl } from 'howler';
 
 import { BoardContext } from 'context/BoardContext';
 
@@ -36,8 +37,21 @@ const EditEffect = () => {
 
   function addEffect(e) {
     e.preventDefault();
-    effects[activeGroup][activeKey] = values;
-    updateEffects(effects);
+
+    const path = getAudioPath(effect);
+    const sound = new Howl({
+      src: [path],
+      preload: 'metadata',
+      onload: e => {
+        const duration = sound.duration();
+        effects[activeGroup][activeKey] = {
+          ...values,
+          duration
+        };
+        console.log(duration);
+        updateEffects(effects);
+      }
+    });
   }
 
   function removeEffect() {

@@ -50,6 +50,10 @@ label {
   color: black;
 }
 
+.isActive {
+  border: 2px solid greenyellow !important;
+}
+
 @media (min-width: 1000px) {
   .key {
     font-size: 30px;

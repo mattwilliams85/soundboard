@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Howl } from 'howler';
 
 import Effect from 'components/Effect';
 import Group from 'components/Group';
@@ -6,6 +7,7 @@ import EditEffect from 'components/Forms/EditEffect';
 import EditGroup from 'components/Forms/EditGroup';
 import Modal from 'components/Modal';
 
+import { getAudioPath } from 'helpers.js';
 import { defaultEffects, qwerty } from 'constants.js';
 import { BoardContext } from 'context/BoardContext';
 
@@ -15,6 +17,7 @@ import styles from './styles.module.scss';
 
 const Board = () => {
   const [activeKey, setActiveKey] = useState();
+  const [activeEffect, setActiveEffect] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [activeGroup, setActiveGroup] = useState('1');
   const [effects, setEffects] = useState(
@@ -43,11 +46,14 @@ const Board = () => {
     const effect = effects[activeGroup][keymap];
 
     if (effect) {
-      const path = effect.file.replace(
-        'C:\\fakepath\\',
-        `${process.env.PUBLIC_URL}/audio/`
-      );
-      new Audio(path).play();
+      setActiveEffect();
+      const path = getAudioPath(effect);
+      const sound = new Howl({
+        src: [path]
+      });
+
+      setActiveEffect(keymap);
+      sound.play();
     }
   }
 
@@ -87,7 +93,13 @@ const Board = () => {
             return (
               <div className={styles.row} key={index}>
                 {row.map(keymap => {
-                  return <Effect keymap={keymap} key={keymap} />;
+                  return (
+                    <Effect
+                      keymap={keymap}
+                      key={keymap}
+                      activeEffect={activeEffect}
+                    />
+                  );
                 })}
               </div>
             );

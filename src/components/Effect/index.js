@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import classnames from 'classnames';
 
 import { BoardContext } from 'context/BoardContext';
@@ -6,7 +6,9 @@ import { BoardContext } from 'context/BoardContext';
 import styles from './styles.module.scss';
 
 const Effect = props => {
-  const { keymap } = props;
+  const soundTimeout = useRef();
+  const { activeEffect, keymap } = props;
+  const [isActive, setIsActive] = useState(false);
   const {
     activeGroup,
     effects,
@@ -19,6 +21,16 @@ const Effect = props => {
     color: { hex: '#888' },
     label: ''
   };
+
+  useEffect(() => {
+    if (activeEffect === keymap) {
+      setIsActive(true);
+      clearTimeout(soundTimeout.current);
+      soundTimeout.current = setTimeout(() => {
+        setIsActive(false);
+      }, effect.duration * 1000);
+    }
+  }, [activeEffect]);
 
   function handleOnClick() {
     if (isEditMode) {
@@ -33,9 +45,13 @@ const Effect = props => {
   return (
     <div
       className={classnames(styles.effectButton, {
-        [styles.editMode]: isEditMode
+        [styles.editMode]: isEditMode,
+        [styles.isActive]: isActive
       })}
-      style={{ backgroundColor: effect.color.hex }}
+      style={{
+        backgroundColor: effect.color.hex,
+        border: `2px solid ${effect.color.hex}`
+      }}
       onClick={handleOnClick}
     >
       <div className={styles.key}>{effect.keymap.toUpperCase()}</div>
