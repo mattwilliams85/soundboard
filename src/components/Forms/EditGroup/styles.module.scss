@@ -1,0 +1,23 @@
+.input {
+  margin: 16px 0;
+}
+
+button {
+  background: black;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  height: 40px;
+  outline: none;
+  padding: 0 32px;
+}
+
+.trashIcon {
+  height: 30px;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 30px;
+}

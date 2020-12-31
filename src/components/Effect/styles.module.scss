@@ -1,0 +1,72 @@
+.key {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -8px;
+}
+
+.name {
+  bottom: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  position: absolute;
+}
+
+.effectButton {
+  align-items: center;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  height: 7vw;
+  justify-content: center;
+  margin: 0.5vw;
+  position: relative;
+  width: 7vw;
+
+  &:after {
+    background: rgba(0,0,0,0);
+    border-radius: 8px;
+    content: "";
+    height: 100%;
+    position: absolute;
+    transition: background 0.3s;
+    width: 100%;
+  }
+
+  &:hover:after {
+    background: rgba(0,0,0,0.15);
+  }
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.editMode {
+  background: white !important;
+  border: 2px solid #888;
+  color: black;
+}
+
+@media (min-width: 1000px) {
+  .key {
+    font-size: 30px;
+    margin-top: -8px;
+  }
+
+  .name {
+    bottom: 8px;
+    font-size: 14px;
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .effectButton {
+    height: 100px;
+    margin: 8px;
+    width: 100px;
+  }
+}

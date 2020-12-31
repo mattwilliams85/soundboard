@@ -1,0 +1,48 @@
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
+
+body {
+  background: black;
+}
+
+.board {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 50px;
+
+  * {
+    user-select: none;
+  }
+}
+
+.editToggle {
+  cursor: pointer;
+  fill: #ccc;
+  height: 30px;
+  position: absolute;
+  right: 24px;
+  top: 16px;
+  width: 30px;
+
+  path {
+    fill: #ccc;
+  }
+}
+
+.row {
+  display: flex;
+
+  &:nth-child(2) {
+    margin-left: 3.5vw;
+  }
+
+  &:nth-child(3) {
+    margin-left: 7vw;
+  }
+
+  &:nth-child(4) {
+    margin-left: 10.5vw;
+  }
+}
