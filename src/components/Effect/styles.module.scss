@@ -1,26 +1,34 @@
 .key {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: -8px;
+  font-size: 0.9vw;
+  position: absolute;
+  right: 6px;
+  top: 4px;
 }
 
 .name {
-  bottom: 8px;
-  font-size: 10px;
+  font-size: 1.1vw;
   font-weight: bold;
-  position: absolute;
+
+  &:last-child {
+    color: #ccc;
+    font-size: 0.85vw;
+    text-transform: uppercase;
+  }
 }
 
 .effectButton {
   align-items: center;
+  background: #353b4c;
   border-radius: 8px;
   box-sizing: border-box;
   color: white;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   height: 7vw;
   justify-content: center;
   margin: 0.5vw;
+  padding: 4px;
   position: relative;
   width: 7vw;
 
@@ -54,23 +62,18 @@ label {
   border: 2px solid greenyellow !important;
 }
 
-@media (min-width: 1000px) {
-  .key {
-    font-size: 30px;
-    margin-top: -8px;
-  }
-
-  .name {
-    bottom: 8px;
-    font-size: 14px;
-  }
-
-}
-
 @media (min-width: 1280px) {
   .effectButton {
     height: 100px;
     margin: 8px;
     width: 100px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .key {
+    font-size: 12px;
   }
 }

@@ -18,7 +18,7 @@ const Effect = props => {
   } = useContext(BoardContext);
   const effect = effects[activeGroup][keymap] || {
     keymap,
-    color: { hex: '#888' },
+    color: { hex: '#353b4c' },
     label: ''
   };
 
@@ -49,13 +49,13 @@ const Effect = props => {
         [styles.isActive]: isActive
       })}
       style={{
-        backgroundColor: effect.color.hex,
         border: `2px solid ${effect.color.hex}`
       }}
       onClick={handleOnClick}
     >
       <div className={styles.key}>{effect.keymap.toUpperCase()}</div>
       <div className={styles.name}>{effect.label}</div>
+      <div className={styles.name}>{effect.sublabel}</div>
     </div>
   );
 };

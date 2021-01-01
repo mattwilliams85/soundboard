@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { Howl } from 'howler';
 
+import { getAudioPath } from 'helpers.js';
 import { BoardContext } from 'context/BoardContext';
 
 import { ReactComponent as IconTrash } from 'icons/trash-icon.svg';
@@ -20,7 +21,7 @@ const EditEffect = () => {
   const initialValues = {
     label: '',
     keymap: '',
-    color: { hex: '#70335C' }
+    color: { hex: '#de1bab' }
   };
   const [values, setValues] = useState(effect.label ? effect : initialValues);
 
@@ -38,7 +39,7 @@ const EditEffect = () => {
   function addEffect(e) {
     e.preventDefault();
 
-    const path = getAudioPath(effect);
+    const path = getAudioPath(values);
     const sound = new Howl({
       src: [path],
       preload: 'metadata',
@@ -75,8 +76,18 @@ const EditEffect = () => {
       <h2>Edit {activeKey.toUpperCase()} Button</h2>
       <form onSubmit={addEffect}>
         <div className={styles.input}>
+          <label>Music File</label>
+          <input
+            name="file"
+            type="file"
+            onChange={value => handleChange(value)}
+            required={!values.file}
+          />
+        </div>
+        <div className={styles.input}>
           <label>Label</label>
           <input
+            maxLength={9}
             name="label"
             value={values.label}
             onChange={value => handleChange(value)}
@@ -84,12 +95,12 @@ const EditEffect = () => {
           />
         </div>
         <div className={styles.input}>
-          <label>Music File</label>
+          <label>Sublabel</label>
           <input
-            name="file"
-            type="file"
+            maxLength={9}
+            name="sublabel"
+            value={values.sublabel}
             onChange={value => handleChange(value)}
-            required={!values.file}
           />
         </div>
         <div className={styles.input}>

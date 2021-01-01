@@ -1,20 +1,20 @@
 .key {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: -8px;
+  font-size: 0.9vw;
+  position: absolute;
+  right: 6px;
+  top: 4px;
 }
 
 .name {
-  bottom: 8px;
-  font-size: 10px;
+  font-size: 1.1vw;
   font-weight: bold;
-  position: absolute;
+  margin-top: 4px;
 }
 
 .effectButton {
   align-items: center;
   background: #222;
-  border: 2px solid white;
+  border: 2px solid #8d8d8d;
   border-radius: 8px;
   box-sizing: border-box;
   color: white;
@@ -26,10 +26,6 @@
   position: relative;
   transition: border-color 0.1s;
   width: 7vw;
-
-  &.active {
-    border: 2px solid greenyellow;
-  }
 
   &:after {
     background: rgba(0,0,0,0);
@@ -46,9 +42,12 @@
   }
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
+.active {
+  border: 2px solid greenyellow;
+
+  .key, .name {
+    color: greenyellow;
+  }
 }
 
 .editMode {
@@ -57,23 +56,18 @@ label {
   color: black;
 }
 
-@media (min-width: 1000px) {
-  .key {
-    font-size: 30px;
-    margin-top: -8px;
-  }
-
-  .name {
-    bottom: 8px;
-    font-size: 14px;
-  }
-
-}
-
 @media (min-width: 1280px) {
   .effectButton {
     height: 100px;
     margin: 8px;
     width: 100px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .key {
+    font-size: 12px;
   }
 }
