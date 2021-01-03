@@ -6,12 +6,12 @@ import { ReactComponent as IconTrash } from 'icons/trash-icon.svg';
 import styles from './styles.module.scss';
 
 const EditGroup = () => {
-  const { activeKey, setActiveKey, effects, setIsEditMode } = useContext(
+  const { activeModal, setActiveModal, effects, setIsEditMode } = useContext(
     BoardContext
   );
-  const effect = effects[activeKey] || {};
+  const effect = effects[activeModal] || {};
 
-  const [values, setValues] = useState(effects[activeKey].label || '');
+  const [values, setValues] = useState(effects[activeModal].label || '');
 
   function handleChange(e) {
     const { target } = e;
@@ -22,18 +22,18 @@ const EditGroup = () => {
 
   function addMode(e) {
     e.preventDefault();
-    effects[activeKey].label = values;
+    effects[activeModal].label = values;
     updateEffects(effects);
   }
 
   function removeMode() {
-    effects[activeKey].label = undefined;
+    effects[activeModal].label = undefined;
     updateEffects(effects);
   }
 
   function updateEffects(effects) {
     localStorage.setItem('effects', JSON.stringify(effects));
-    setActiveKey();
+    setActiveModal();
     setIsEditMode(false);
   }
 

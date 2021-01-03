@@ -9,6 +9,10 @@
   font-size: 1.1vw;
   font-weight: bold;
 
+  &:nth-child(2) {
+    margin-top: 6px;
+  }
+
   &:last-child {
     color: #ccc;
     font-size: 0.85vw;

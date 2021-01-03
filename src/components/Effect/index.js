@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
+import { find } from 'lodash';
 import classnames from 'classnames';
 
 import { BoardContext } from 'context/BoardContext';
@@ -7,12 +8,14 @@ import styles from './styles.module.scss';
 
 const Effect = props => {
   const soundTimeout = useRef();
-  const { activeEffect, keymap } = props;
+  const { activeEffects, keymap } = props;
   const [isActive, setIsActive] = useState(false);
   const {
     activeGroup,
     effects,
     isEditMode,
+    activeKey,
+    setActiveModal,
     setActiveKey,
     playEffect
   } = useContext(BoardContext);
@@ -23,22 +26,26 @@ const Effect = props => {
   };
 
   useEffect(() => {
-    if (activeEffect === keymap) {
+    if (`${activeGroup}_${activeKey}` === effect.id) {
       setIsActive(true);
       clearTimeout(soundTimeout.current);
       soundTimeout.current = setTimeout(() => {
         setIsActive(false);
-      }, effect.duration * 1000);
+        setActiveKey();
+      }, 300);
+    } else {
+      clearTimeout(soundTimeout.current);
+      setIsActive(false);
     }
-  }, [activeEffect]);
+  }, [activeKey]);
 
   function handleOnClick() {
     if (isEditMode) {
-      setActiveKey(keymap);
+      setActiveModal(keymap);
     } else if (effect.file) {
       playEffect(keymap);
     } else {
-      setActiveKey(keymap);
+      setActiveModal(keymap);
     }
   }
 

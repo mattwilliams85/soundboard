@@ -6,6 +6,7 @@ import Group from 'components/Group';
 import EditEffect from 'components/Forms/EditEffect';
 import EditGroup from 'components/Forms/EditGroup';
 import Modal from 'components/Modal';
+import DurationList from 'components/DurationList';
 
 import { getAudioPath } from 'helpers.js';
 import { defaultEffects, qwerty } from 'constants.js';
@@ -17,7 +18,8 @@ import styles from './styles.module.scss';
 
 const Board = () => {
   const [activeKey, setActiveKey] = useState();
-  const [activeEffect, setActiveEffect] = useState({});
+  const [activeModal, setActiveModal] = useState();
+  const [activeEffects, setActiveEffects] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [activeGroup, setActiveGroup] = useState('1');
   const [effects, setEffects] = useState(
@@ -33,12 +35,13 @@ const Board = () => {
   });
 
   function handleKeyPress(e) {
-    if (isEditMode || activeKey) return;
+    if (isEditMode || activeModal) return;
 
     if (!isNaN(e.key) && e.key) {
       setActiveGroup(e.key);
     } else {
       playEffect(e.key);
+      setActiveKey(e.key);
     }
   }
 
@@ -46,13 +49,16 @@ const Board = () => {
     const effect = effects[activeGroup][keymap];
 
     if (effect) {
-      setActiveEffect();
       const path = getAudioPath(effect);
       const sound = new Howl({
         src: [path]
       });
 
-      setActiveEffect(keymap);
+      const timestamp = Date.now();
+      setActiveEffects({
+        ...activeEffects,
+        [timestamp]: { ...effect, timestamp }
+      });
       sound.play();
     }
   }
@@ -62,6 +68,8 @@ const Board = () => {
       value={{
         activeKey,
         setActiveKey,
+        activeModal,
+        setActiveModal,
         activeGroup,
         setActiveGroup,
         effects,
@@ -93,30 +101,27 @@ const Board = () => {
             return (
               <div className={styles.row} key={index}>
                 {row.map(keymap => {
-                  return (
-                    <Effect
-                      keymap={keymap}
-                      key={keymap}
-                      activeEffect={activeEffect}
-                    />
-                  );
+                  return <Effect keymap={keymap} key={keymap} />;
                 })}
               </div>
             );
           })}
         </div>
-
-        {activeKey && isNaN(activeKey) && (
-          <Modal onOverlayClick={() => setActiveKey()}>
-            <EditEffect />
-          </Modal>
-        )}
-        {activeKey && !isNaN(activeKey) && (
-          <Modal onOverlayClick={() => setActiveKey()}>
-            <EditGroup />
-          </Modal>
-        )}
       </div>
+      <DurationList
+        activeEffects={activeEffects}
+        setActiveEffects={setActiveEffects}
+      />
+      {activeModal && isNaN(activeModal) && (
+        <Modal onOverlayClick={() => setActiveModal()}>
+          <EditEffect />
+        </Modal>
+      )}
+      {activeModal && !isNaN(activeModal) && (
+        <Modal onOverlayClick={() => setActiveModal()}>
+          <EditGroup />
+        </Modal>
+      )}
     </BoardContext.Provider>
   );
 };

@@ -11,13 +11,13 @@ import styles from './styles.module.scss';
 const EditEffect = () => {
   const {
     activeGroup,
-    activeKey,
-    setActiveKey,
+    activeModal,
+    setActiveModal,
     setEffects,
     effects,
     setIsEditMode
   } = useContext(BoardContext);
-  const effect = effects[activeGroup][activeKey] || {};
+  const effect = effects[activeGroup][activeModal] || {};
   const initialValues = {
     label: '',
     keymap: '',
@@ -29,7 +29,7 @@ const EditEffect = () => {
     const { target } = e;
     const { name, value } = target;
     e.persist();
-    setValues({ ...values, [name]: value, keymap: activeKey });
+    setValues({ ...values, [name]: value, keymap: activeModal });
   }
 
   function handleColorChange(e) {
@@ -45,25 +45,25 @@ const EditEffect = () => {
       preload: 'metadata',
       onload: e => {
         const duration = sound.duration();
-        effects[activeGroup][activeKey] = {
+        effects[activeGroup][activeModal] = {
           ...values,
-          duration
+          duration,
+          id: `${activeGroup}_${activeModal}`
         };
-        console.log(duration);
         updateEffects(effects);
       }
     });
   }
 
   function removeEffect() {
-    effects[activeGroup][activeKey] = undefined;
+    effects[activeGroup][activeModal] = undefined;
     updateEffects(effects);
   }
 
   function updateEffects(effects) {
     localStorage.setItem('effects', JSON.stringify(effects));
     setValues(initialValues);
-    setActiveKey();
+    setActiveModal();
     setEffects(effects);
     setIsEditMode(false);
   }
@@ -73,7 +73,7 @@ const EditEffect = () => {
       {effect.label && (
         <IconTrash className={styles.trashIcon} onClick={removeEffect} />
       )}
-      <h2>Edit {activeKey.toUpperCase()} Button</h2>
+      <h2>Edit {activeModal.toUpperCase()} Button</h2>
       <form onSubmit={addEffect}>
         <div className={styles.input}>
           <label>Music File</label>

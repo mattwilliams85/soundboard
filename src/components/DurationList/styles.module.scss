@@ -1,0 +1,26 @@
+.list {
+  color: white;
+  padding: 0 50px;
+  text-align: left;
+  width: 500px;
+}
+
+.item {
+  align-items: center;
+  display: flex;
+}
+
+.label {
+  margin-right: 16px;
+  overflow: hidden;
+  width: 95px;
+}
+
+.bar {
+  height: 10px;
+  transition: 0.2s linear;
+}
+
+.barWrap {
+  width: calc(100% - 166px);
+}

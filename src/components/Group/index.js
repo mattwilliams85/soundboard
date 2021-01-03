@@ -12,13 +12,13 @@ const Mode = props => {
     effects,
     isEditMode,
     setActiveGroup,
-    setActiveKey
+    setActiveModal
   } = useContext(BoardContext);
   const label = effects[keymap].label;
 
   function handleOnClick() {
     if (isEditMode) {
-      setActiveKey(keymap);
+      setActiveModal(keymap);
     } else {
       setActiveGroup(keymap);
     }
