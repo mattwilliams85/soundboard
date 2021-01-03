@@ -19,6 +19,10 @@ import { ReactComponent as IconClose } from 'icons/close-icon.svg';
 import styles from './styles.module.scss';
 
 const Board = () => {
+  const [effects, setEffects] = useState(
+    { ...defaultEffects, ...JSON.parse(localStorage.getItem('effects')) } ||
+      defaultEffects
+  );
   const [activeKey, setActiveKey] = useState();
   const [loopActive, setLoopActive] = useState();
   const [metaActive, setMetaActive] = useState();
@@ -26,11 +30,7 @@ const Board = () => {
   const [activeModal, setActiveModal] = useState();
   const [activeEffects, setActiveEffects] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
-  const [activeGroup, setActiveGroup] = useState('1');
-  const [effects, setEffects] = useState(
-    { ...defaultEffects, ...JSON.parse(localStorage.getItem('effects')) } ||
-      defaultEffects
-  );
+  const [activeGroup, setActiveGroup] = useState(effects.activeGroup);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -41,6 +41,13 @@ const Board = () => {
       document.removeEventListener('keyup', handleKeyUp);
     };
   });
+
+  useEffect(() => {
+    localStorage.setItem(
+      'effects',
+      JSON.stringify({ ...effects, activeGroup })
+    );
+  }, [activeGroup]);
 
   function handleKeyDown(e) {
     const key = e.key.toLowerCase();

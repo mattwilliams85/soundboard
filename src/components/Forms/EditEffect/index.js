@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { SketchPicker } from 'react-color';
+import { TwitterPicker } from 'react-color';
 import { Howl } from 'howler';
 
 import { getAudioPath } from 'helpers.js';
+import { colors } from 'constants.js';
 import { BoardContext } from 'context/BoardContext';
 
 import { ReactComponent as IconTrash } from 'icons/trash-icon.svg';
@@ -105,7 +106,9 @@ const EditEffect = () => {
         </div>
         <div className={styles.input}>
           <label>Color</label>
-          <SketchPicker
+          <TwitterPicker
+            triangle={'hide'}
+            colors={colors}
             color={values.color}
             value={values.color}
             onChange={handleColorChange}

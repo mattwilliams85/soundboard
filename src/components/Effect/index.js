@@ -47,6 +47,19 @@ const Effect = props => {
     }
   }
 
+  function formatKey(key) {
+    switch (key) {
+      case ',':
+        return '<';
+      case '.':
+        return '>';
+      case '/':
+        return '?';
+      default:
+        return key.toUpperCase();
+    }
+  }
+
   return (
     <div
       className={classnames(styles.effectButton, {
@@ -60,7 +73,7 @@ const Effect = props => {
       }}
       onClick={handleOnClick}
     >
-      <div className={styles.key}>{effect.keymap.toUpperCase()}</div>
+      <div className={styles.key}>{formatKey(effect.keymap)}</div>
       <div className={styles.name}>{effect.label}</div>
       <div className={styles.name}>{effect.sublabel}</div>
     </div>
