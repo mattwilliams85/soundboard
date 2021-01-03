@@ -31,7 +31,7 @@
   flex-direction: column;
   height: 7vw;
   justify-content: center;
-  margin: 0.5vw;
+  margin: 0 0.5vw;
   padding: 4px;
   position: relative;
   width: 7vw;
@@ -63,7 +63,8 @@ label {
 }
 
 .isActive {
-  border: 2px solid greenyellow !important;
+  // border: 2px solid greenyellow !important;
+  background: #36446c !important;
 }
 
 @media (min-width: 1280px) {

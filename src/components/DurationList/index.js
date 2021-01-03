@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useContext, useState } from 'react';
-import classnames from 'classnames';
+import React from 'react';
 
-import { BoardContext } from 'context/BoardContext';
 import Bar from './Bar';
 
 import styles from './styles.module.scss';

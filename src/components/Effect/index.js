@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
-import { find } from 'lodash';
 import classnames from 'classnames';
 
 import { BoardContext } from 'context/BoardContext';
@@ -8,8 +7,8 @@ import styles from './styles.module.scss';
 
 const Effect = props => {
   const soundTimeout = useRef();
-  const { activeEffects, keymap } = props;
-  const [isActive, setIsActive] = useState(false);
+  const { keymap, loopActive } = props;
+  const [isLocked, setIsLocked] = useState(null);
   const {
     activeGroup,
     effects,
@@ -22,20 +21,19 @@ const Effect = props => {
   const effect = effects[activeGroup][keymap] || {
     keymap,
     color: { hex: '#353b4c' },
-    label: ''
+    label: '',
+    id: '='
   };
 
   useEffect(() => {
     if (`${activeGroup}_${activeKey}` === effect.id) {
-      setIsActive(true);
+      if (loopActive) setIsLocked(isLocked ? null : activeGroup);
       clearTimeout(soundTimeout.current);
       soundTimeout.current = setTimeout(() => {
-        setIsActive(false);
         setActiveKey();
       }, 300);
     } else {
       clearTimeout(soundTimeout.current);
-      setIsActive(false);
     }
   }, [activeKey]);
 
@@ -53,7 +51,9 @@ const Effect = props => {
     <div
       className={classnames(styles.effectButton, {
         [styles.editMode]: isEditMode,
-        [styles.isActive]: isActive
+        [styles.isActive]:
+          `${activeGroup}_${activeKey}` === effect.id ||
+          isLocked === activeGroup
       })}
       style={{
         border: `2px solid ${effect.color.hex}`

@@ -8,9 +8,11 @@ body {
 
 .board {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   margin: 0 auto;
-  padding: 50px;
+  padding: 75px 50px 50px;
+  width: 80vw;
 
   * {
     user-select: none;
@@ -19,7 +21,7 @@ body {
 
 .editToggle {
   cursor: pointer;
-  fill: #ccc;
+  fill: #eee;
   height: 30px;
   position: absolute;
   right: 24px;
@@ -27,22 +29,48 @@ body {
   width: 30px;
 
   path {
-    fill: #ccc;
+    fill: #eee;
   }
+}
+
+.topButton {
+  color: #eee;
+  font-weight: 700;
+  position: fixed;
+  top: 18px;
+
+  &.active {
+    color: greenyellow;
+  }
+}
+
+.shiftButton {
+  left: 24px;
+}
+
+.tabButton {
+  left: 175px;
+}
+
+.buttonKey {
+  margin-left: 8px;
 }
 
 .row {
   display: flex;
+  margin: 1vw 0;
 
   &:nth-child(2) {
-    margin-left: 3.5vw;
+    // margin-left: 3.5vw;
+    margin-top: 12px;
   }
 
-  &:nth-child(3) {
-    margin-left: 7vw;
-  }
+  // &:nth-child(3) {
+  //   margin-left: 7vw;
+  // }
 
-  &:nth-child(4) {
-    margin-left: 10.5vw;
-  }
+  // &:nth-child(4) {
+  //   margin-left: 10.5vw;
+  // }
 }
+

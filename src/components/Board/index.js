@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Howl } from 'howler';
+import classnames from 'classnames';
+import { find } from 'lodash';
 
 import Effect from 'components/Effect';
 import Group from 'components/Group';
@@ -8,8 +10,8 @@ import EditGroup from 'components/Forms/EditGroup';
 import Modal from 'components/Modal';
 import DurationList from 'components/DurationList';
 
-import { getAudioPath } from 'helpers.js';
-import { defaultEffects, qwerty } from 'constants.js';
+import { getAudioPath, generateUniqueRandom } from 'helpers.js';
+import { defaultEffects, qwerty, randomRates } from 'constants.js';
 import { BoardContext } from 'context/BoardContext';
 
 import { ReactComponent as IconEdit } from 'icons/edit-icon.svg';
@@ -18,30 +20,52 @@ import styles from './styles.module.scss';
 
 const Board = () => {
   const [activeKey, setActiveKey] = useState();
+  const [loopActive, setLoopActive] = useState();
+  const [metaActive, setMetaActive] = useState();
+  const [randomizeActive, setRandomizeActive] = useState();
   const [activeModal, setActiveModal] = useState();
   const [activeEffects, setActiveEffects] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [activeGroup, setActiveGroup] = useState('1');
   const [effects, setEffects] = useState(
-    JSON.parse(localStorage.getItem('effects')) || defaultEffects
+    { ...defaultEffects, ...JSON.parse(localStorage.getItem('effects')) } ||
+      defaultEffects
   );
 
   useEffect(() => {
-    document.addEventListener('keypress', handleKeyPress);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      document.removeEventListener('keypress', handleKeyPress);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
     };
   });
 
-  function handleKeyPress(e) {
-    if (isEditMode || activeModal) return;
+  function handleKeyDown(e) {
+    const key = e.key.toLowerCase();
+    if (isEditMode || activeModal || metaActive) return;
 
-    if (!isNaN(e.key) && e.key) {
-      setActiveGroup(e.key);
+    if (qwerty[0].includes(key)) {
+      setActiveGroup(key);
+    } else if (key === 'shift') {
+      setLoopActive(true);
+    } else if (key === 'meta') {
+      setMetaActive(true);
+    } else if (key === 'tab') {
+      e.preventDefault();
+      setRandomizeActive(!randomizeActive);
     } else {
-      playEffect(e.key);
-      setActiveKey(e.key);
+      playEffect(key);
+      setActiveKey(key);
+    }
+  }
+
+  function handleKeyUp(e) {
+    if (e.key === 'Shift') {
+      setLoopActive(false);
+    } else if (e.key === 'Meta') {
+      setMetaActive(false);
     }
   }
 
@@ -51,15 +75,26 @@ const Board = () => {
     if (effect) {
       const path = getAudioPath(effect);
       const sound = new Howl({
-        src: [path]
+        src: [path],
+        rate: randomizeActive ? generateUniqueRandom() : 1,
+        loop: loopActive
       });
 
-      const timestamp = Date.now();
-      setActiveEffects({
-        ...activeEffects,
-        [timestamp]: { ...effect, timestamp }
-      });
-      sound.play();
+      const dupeEffect = find(activeEffects, { id: effect.id });
+      if (loopActive && dupeEffect) {
+        dupeEffect.sound.stop();
+        setActiveEffects({
+          ...activeEffects,
+          [dupeEffect.timestamp]: undefined
+        });
+      } else {
+        const timestamp = Date.now();
+        setActiveEffects({
+          ...activeEffects,
+          [timestamp]: { ...effect, timestamp, looping: loopActive, sound }
+        });
+        sound.play();
+      }
     }
   }
 
@@ -90,6 +125,20 @@ const Board = () => {
           onClick={() => setIsEditMode(true)}
         />
       )}
+      <div
+        className={classnames(styles.topButton, styles.shiftButton, {
+          [styles.active]: loopActive
+        })}
+      >
+        Loop Effect<span className={styles.buttonKey}>⇧</span>
+      </div>
+      <div
+        className={classnames(styles.topButton, styles.tabButton, {
+          [styles.active]: randomizeActive
+        })}
+      >
+        Randomize <span className={styles.buttonKey}>↹</span>
+      </div>
       <div className={styles.board}>
         <div>
           <div className={styles.row}>
@@ -101,17 +150,24 @@ const Board = () => {
             return (
               <div className={styles.row} key={index}>
                 {row.map(keymap => {
-                  return <Effect keymap={keymap} key={keymap} />;
+                  return (
+                    <Effect
+                      keymap={keymap}
+                      key={keymap}
+                      loopActive={loopActive}
+                    />
+                  );
                 })}
               </div>
             );
           })}
         </div>
+        <DurationList
+          activeEffects={activeEffects}
+          setActiveEffects={setActiveEffects}
+        />
       </div>
-      <DurationList
-        activeEffects={activeEffects}
-        setActiveEffects={setActiveEffects}
-      />
+
       {activeModal && isNaN(activeModal) && (
         <Modal onOverlayClick={() => setActiveModal()}>
           <EditEffect />

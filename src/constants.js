@@ -17,3 +17,5 @@ export const defaultEffects = {
   8: {},
   9: {}
 };
+
+export const randomRates = [1, 0.8, 1.1, 0.9, 1.2, 1, 0.85, 1.3];
